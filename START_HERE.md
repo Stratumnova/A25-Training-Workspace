@@ -25,3 +25,6 @@ Full transcript capture; SHA-256 manifest archived from Claude; independent chec
 
 ## Authority boundary
 GPT may maintain routine indexes, status and handoffs for authorized work. Zed retains governance changes, permissions, deletion of historical evidence and official contested decisions. Claude review never equals Zed approval.
+
+## Claude archive
+The [Claude source-preserving archive](archives/claude/README.md) now has separate inbox, transcripts, reviews, handoffs, manifests and derived-reading directories. This is an initialized structure, **not** evidence that a complete Claude transcript has been captured. Original Claude exports must be supplied or captured through a separately authorized mechanism.
