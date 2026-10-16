@@ -23,3 +23,6 @@ GPT can create infrastructure and preserve Zed-delivered files but cannot claim 
 
 ## Status
 Structure initialized. No complete Claude transcript is yet archived. The Claude review currently recorded at `reviews/claude/A25-REV-001-return-review-2026-10-16.md` is a GPT-authored, Zed-relayed attributed report, **not** an original Claude archive file.
+
+## Incremental capture (2026-10-16)
+Zed directs that Claude's **currently visible conversation be captured in sequential blocks before it drops out of context**, instead of treating a full-account email export as the normal method. See [block capture protocol](transcripts/BLOCK_CAPTURE_PROTOCOL.md), [intake sidecar](inbox/BLOCK_INTAKE_TEMPLATE.md), [hash handshake](manifests/HASH_HANDSHAKE.md) and [capture queue](handoffs/CAPTURE_QUEUE.md). The root [reviews/claude](../../reviews/claude/README.md) folder holds GPT-authored attributed summaries, not Claude originals. This is a documented manual workflow, not yet a working automated capture tool.
