@@ -12,3 +12,5 @@ Unicode: café — Ω → 🧪
 | Claude | NOT_REVIEWED |
 
 End marker: A25-TEST-EOF
+
+Update marker: A25-TEST-UPDATE-1
