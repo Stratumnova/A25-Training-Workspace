@@ -21,15 +21,15 @@ class WatchdogCoreTests(unittest.TestCase):
         self.assertEqual(watchdog.canonical("case-studies/A25-F-002-incident.md", ""), "A25-F-002")
         self.assertEqual(watchdog.canonical("case-studies/A25-F-001-CORR-001.md", ""), "A25-F-001-CORR-001")
         self.assertEqual(watchdog.canonical("living-record/A25-DEC-001-resolution.md",
-                                           "id: A25-DEC-001-RESOLUTION"),
+                                           "---\nid: A25-DEC-001-RESOLUTION\n---"),
                          "A25-DEC-001-RESOLUTION")
 
     def test_template_not_id(self):
-        self.assertIsNone(watchdog.canonical("templates/example.md", "id: A25-F-UNASSIGNED"))
+        self.assertIsNone(watchdog.canonical("templates/example.md", "---\nid: A25-F-UNASSIGNED\n---"))
 
     def test_frontmatter_disagreement(self):
         self.assertTrue(watchdog.canonical("case-studies/A25-F-004-x.md",
-                                            "id: A25-F-002").startswith("!MISMATCH:"))
+                                            "---\nid: A25-F-002\n---").startswith("!MISMATCH:"))
 
     def test_path_traversal(self):
         self.assertIsNone(watchdog.safe_path("../outside"))
