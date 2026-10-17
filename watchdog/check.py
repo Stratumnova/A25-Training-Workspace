@@ -47,7 +47,7 @@ def safe_path(raw: str) -> Path | None:
 def canonical(path: str, contents: str) -> str | None:
     m = FRONT.search(contents[:3000])
     front = m.group(1) if m else None
-    file_id = ID.match(Path(path).stem)
+    file_id = ID.match(Path(path).stem.upper())
     fm_id = ID.match(front) if front else None
     if front and ("UNASSIGNED" in front):
         return None
