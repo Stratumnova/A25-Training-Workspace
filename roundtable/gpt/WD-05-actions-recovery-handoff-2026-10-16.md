@@ -58,3 +58,10 @@ The case study distinguishes Zed's source wording, GPT's interpretation and reas
 Zed will load a repository ZIP into a fresh chat on a friend's phone, then temporarily adopt the new session as a builder to test whether it can align with A25. GPT prepared a read-only onboarding exercise at `roundtable/builders-inbox/A25-external-builder-intake-test-2026-10-16.md` (commit `ba8d510bdb071c5a5f0bf998f4f407c40adf27be`). The ZIP must be taken from `build/wd-02-watchdog-v0`, not `main`, for current Watchdog/WD-05 evidence. This is a candidate evaluation only; no builder acceptance or external-session PASS has occurred.
 
 Next: Zed supplies the guest's full intake report. GPT evaluates it against the onboarding checklist, records provenance and findings in a new builder-intake case study, and requests Zed's acceptance decision. No credentials, private data, write access, or authority changes are implied.
+
+
+## External builder intake result — Zed relay at 18:50 MDT
+
+Zed returned the full text of a fresh ChatGPT session's A25 External Builder Intake Report, with a screenshot of the shared chat. GPT evaluated it as **PROVISIONAL PASS** for repository comprehension, evidence labeling, authority boundaries and open-task recognition. This was an open-book intake with an explicit rubric, not an independent builder performance test. Candidate claimed no GitHub operations, no writes and no acceptance. GPT's evaluation and substantive report summary are in `case-studies/A25-external-builder-intake-test-01-2026-10-16.md` (creation commit `796aff253328610ee4dabd4d8be53a09897a3b4b`). The original candidate report was pasted by Zed; source byte parity is unverified.
+
+**Next:** Wait for Zed to adopt the candidate as a temporary builder, then assess one novel bounded read-only task. Do not infer authenticated identity, permissions or final acceptance from the intake response.
