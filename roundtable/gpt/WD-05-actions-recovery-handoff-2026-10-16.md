@@ -33,3 +33,12 @@ Claude independently reviewed the earlier code and identified open design gaps; 
 ## Working rule
 
 If a GitHub write is blocked by platform safety checks, stop that operation, report exact error and payload to Zed, and do not retry or reroute without specific authorization. Authorization permits a normal retry, not a safety bypass.
+
+
+## Zed continuity instruction — 16 October 2026, after WD-05
+
+Zed directed that GPT Roundtable and Claude Roundtable information remain inside their respective folders, because either AI conversation may be lost mid-build. GPT is responsible for keeping its own current state and evidence in `roundtable/gpt/`; Claude-authored information belongs in its distinct Claude records, preserving original author attribution and review independence. Shared decisions belong in shared Roundtable records, and significant failures belong in case studies. Do not silently convert Claude's review into GPT-authored conclusions.
+
+Recovery handoffs must distinguish OBSERVED tool results, CLAUDE-REPORTED findings, ZED-APPROVED decisions, and OPEN work; include branch, commit, next action and unresolved blockers. Update records at meaningful checkpoints, before a planned handoff, and after an interruption. Do not claim autonomous background recording: writes happen only when a session is active and tools succeed.
+
+**Current status:** WD-05 case study and GPT handoff have been committed and read back; Claude's previously supplied code review remains an independent document, not rewritten by GPT. The Watchdog development branch remains unmerged and outstanding design gaps remain open.
