@@ -16,8 +16,9 @@ from pathlib import Path, PurePosixPath
 ROOT = Path(__file__).resolve().parents[1]
 DIGEST = re.compile(r"^([0-9a-fA-F]{64})  (.+)$")
 FIELDS = ("FROM", "FOR", "DATE", "RE", "BASIS")
-ID = re.compile(r"^(A25-[A-Z]+-\d{3}(?:-CORR-\d{3}|-RESOLUTION)?|RT-\d{3}|WD-\d{3})(?![A-Z0-9-])")
+ID = re.compile(r"^(A25-[A-Z]+-\d{3,}(?:-CORR-\d{3}|-RESOLUTION)?|RT-\d{3}|WD-\d{3})(?=$|-)")
 FRONT = re.compile(r'^id:\s*[\x27\x22]?([^\s\x27\x22]+)', re.MULTILINE)
+FM_ID = re.compile(r"^(?:A25-[A-Z]+-\d{3,}(?:-[A-Z0-9]+)*|RT-\d{3}|WD-\d{3})$")
 PROTECTED = ("roundtable/inbox/", "legacy/")
 
 
@@ -50,17 +51,16 @@ def canonical(path: str, contents: str) -> str | None:
     front = m.group(1) if m else None
     stem = Path(path).stem.upper()
     file_id = ID.match(stem)
-    fm_id = ID.match(front) if front else None
+    fm_id = front if front and FM_ID.fullmatch(front) else None
     if front and "UNASSIGNED" in front:
         return None
     if fm_id and file_id:
-        # A filename may have a descriptive suffix; a frontmatter correction ID
-        # may be more specific than the base filename ID.
+        # Frontmatter may be more specific than the filename ID.
         base = file_id.group(1)
-        declared = fm_id.group(1)
+        declared = fm_id
         if declared != base and not declared.startswith(base + "-"):
             return "!MISMATCH:" + declared + ":" + base
-    return fm_id.group(1) if fm_id else file_id.group(1) if file_id else None
+    return fm_id if fm_id else file_id.group(1) if file_id else None
 
 
 def run() -> int:
@@ -131,6 +131,8 @@ def run() -> int:
             continue
         if name.startswith("roundtable/inbox/") and re.match(r"RT-\d{3}", Path(name).name):
             continue  # replies reference session IDs; sessions own them
+        if not name.startswith("roundtable/sessions/") and re.match(r"RT-\d{3}(?=$|-)", Path(name).stem.upper()):
+            continue  # RT namespace belongs exclusively to session records
         record = canonical(name, path.read_text(encoding="utf-8", errors="replace"))
         if record and record.startswith("!MISMATCH"):
             failures.append(f"W5 {name}: {record}")
