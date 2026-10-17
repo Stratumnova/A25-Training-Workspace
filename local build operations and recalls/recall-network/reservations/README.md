@@ -1,0 +1,2 @@
+# Recall ID Reservations
+One immutable new file `A25gptrecall_idNNN.md` or `A25clauderecall_idNNN.md` per confirmed assignment. Contains ID, platform, assigned-by, assignment time UTC, scope, intended report destination and GitHub commit readback. If the session cannot create or verify the reservation, it must stop before claiming an ID. Claude's reservations are performed by Zed/lead; Drive reports are not reservations.
