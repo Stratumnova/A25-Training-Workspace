@@ -42,3 +42,12 @@ Zed directed that GPT Roundtable and Claude Roundtable information remain inside
 Recovery handoffs must distinguish OBSERVED tool results, CLAUDE-REPORTED findings, ZED-APPROVED decisions, and OPEN work; include branch, commit, next action and unresolved blockers. Update records at meaningful checkpoints, before a planned handoff, and after an interruption. Do not claim autonomous background recording: writes happen only when a session is active and tools succeed.
 
 **Current status:** WD-05 case study and GPT handoff have been committed and read back; Claude's previously supplied code review remains an independent document, not rewritten by GPT. The Watchdog development branch remains unmerged and outstanding design gaps remain open.
+
+
+## A25 Roundtable rooms: design and educational record
+
+Zed instructed GPT to preserve the A25 case-study/training material with Zed's own design thoughts, GPT's responses and engineering rationale, and separately attributed Claude reviews. GPT authored an additive training case study at `case-studies/A25-roundtable-rooms-design-and-training-2026-10-16.md` (creation commit `402b5288fe55325eb37430e2f5b7f741c8b15ac5`).
+
+The case study distinguishes Zed's source wording, GPT's interpretation and reasons, Claude-reported evidence, verified CI results and unresolved work. It covers the separate rooms/folders, manual relay and recovery rules, human safety-stop approvals, and the WD-03/WD-04 GitHub Actions failures and fixes. This does not authorize GPT to edit Claude-authored source records or to claim background recording. Continue to add new user design decisions and GPT's explicit engineering rationale to durable records at meaningful checkpoints.
+
+**Status:** Additive training document created on development branch; Watchdog remains unmerged pending remaining design gates.
