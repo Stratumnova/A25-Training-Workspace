@@ -165,7 +165,7 @@ def run() -> int:
                 warnings.append(f"W4 SKIPPED root commit {commit}")
                 continue
             parent = parents[1]
-            changes = git("diff", "--no-renames", "--name-status", "-z", parent, commit).decode().split("\\0")
+            changes = git("diff", "--no-renames", "--name-status", "-z", parent, commit).decode().split("\0")
             for i in range(0, len(changes) - 1, 2):
                 status, name = changes[i], changes[i + 1]
                 if status[:1] in ("M", "D") and protected(name):
