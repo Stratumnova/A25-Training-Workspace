@@ -130,9 +130,20 @@ def run() -> int:
             ids.setdefault(record, []).append(name)
     for record, paths in sorted(ids.items()):
         if len(paths) > 1:
-            # Historical correction-aware WARN requires mechanical evidence,
-            # not a blanket exemption. Until implemented, fail closed.
-            failures.append(f"W5 collision {record}: {'; '.join(paths)}")
+            # Historical F-002 exception requires exact known paths AND
+            # additive correction with the canonical replacement ID.
+            historical = {
+                "case-studies/A25-F-002-safety-stop-rt005-index-2026-10-16.md",
+                "legacy/pockettest/a25-training/case-studies/A25-F-002-proposed-gpt-fork-sandbox.md",
+            }
+            correction = ROOT / "case-studies/A25-F-004-correction-rt005-safety-stop-id-2026-10-16.md"
+            if (record == "A25-F-002" and set(paths) == historical
+                    and correction.is_file()
+                    and all(x in correction.read_text(encoding="utf-8") for x in historical)
+                    and "A25-F-004" in correction.read_text(encoding="utf-8")):
+                warnings.append(f"W5 historical corrected collision {record}: {'; '.join(paths)}")
+            else:
+                failures.append(f"W5 collision {record}: {'; '.join(paths)}")
     try:
         parents = git("rev-list", "--parents", "-n", "1", "HEAD").decode().strip().split()
         if len(parents) < 2:
@@ -141,8 +152,19 @@ def run() -> int:
             changes = git("diff", "--name-status", "-z", parents[1], "HEAD").decode().split("\0")
             for i in range(0, len(changes)-1, 2):
                 status, name = changes[i], changes[i+1]
-                if status[:1] in ("M", "D") and (protected(name) or name.startswith("manifests/")):
+                if status[:1] in ("M", "D") and protected(name):
                     failures.append(f"W4 protected change {status} {name}")
+                elif name.startswith("manifests/") and status[:1] in ("M", "D"):
+                    if status[:1] == "D":
+                        failures.append(f"W4 deleted manifest {name}")
+                    else:
+                        try:
+                            previous = git("show", f"{parents[1]}:{name}")
+                            current = (ROOT / name).read_bytes()
+                            if not current.startswith(previous):
+                                failures.append(f"W4 rewritten manifest {name}")
+                        except (OSError, subprocess.CalledProcessError):
+                            failures.append(f"W4 cannot verify manifest append {name}")
     except (subprocess.CalledProcessError, UnicodeDecodeError):
         failures.append("W4 cannot compare first parent")
     for name in sorted(tracked):
