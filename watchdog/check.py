@@ -147,29 +147,42 @@ def run() -> int:
                 warnings.append(f"W5 historical corrected collision {record}: {'; '.join(paths)}")
             else:
                 failures.append(f"W5 collision {record}: {'; '.join(paths)}")
+    # On CI, inspect every commit in the pushed range, not merely HEAD.
+    # Locally, inspect HEAD^ only and report that the range is limited.
     try:
-        parents = git("rev-list", "--parents", "-n", "1", "HEAD").decode().strip().split()
-        if len(parents) < 2:
-            warnings.append("W4 SKIPPED root commit")
+        before = os.environ.get("A25_WD_BEFORE") or os.environ.get("GITHUB_EVENT_BEFORE")
+        if before and re.fullmatch(r"[0-9a-fA-F]{40}", before) and int(before, 16) != 0:
+            commits = git("rev-list", "--reverse", f"{before}..HEAD").decode().splitlines()
+        elif before:
+            failures.append("W4 invalid/unavailable push base; cannot verify full range")
+            commits = []
         else:
-            changes = git("diff-tree", "--no-commit-id", "--no-renames", "--name-status", "-r", "-z", "HEAD").decode().split("\0")
-            for i in range(0, len(changes)-1, 2):
-                status, name = changes[i], changes[i+1]
+            commits = git("rev-list", "-n", "1", "HEAD").decode().splitlines()
+            warnings.append("W4 local mode: HEAD only; full push range not verified")
+        for commit in commits:
+            parents = git("rev-list", "--parents", "-n", "1", commit).decode().split()
+            if len(parents) < 2:
+                warnings.append(f"W4 SKIPPED root commit {commit}")
+                continue
+            parent = parents[1]
+            changes = git("diff", "--no-renames", "--name-status", "-z", parent, commit).decode().split("\\0")
+            for i in range(0, len(changes) - 1, 2):
+                status, name = changes[i], changes[i + 1]
                 if status[:1] in ("M", "D") and protected(name):
-                    failures.append(f"W4 protected change {status} {name}")
+                    failures.append(f"W4 protected change {commit} {status} {name}")
                 elif name.startswith("manifests/") and status[:1] in ("M", "D"):
                     if status[:1] == "D":
-                        failures.append(f"W4 deleted manifest {name}")
+                        failures.append(f"W4 deleted manifest {commit} {name}")
                     else:
                         try:
-                            previous = git("show", f"{parents[1]}:{name}")
-                            current = (ROOT / name).read_bytes()
+                            previous = git("show", f"{parent}:{name}")
+                            current = git("show", f"{commit}:{name}")
                             if not current.startswith(previous):
-                                failures.append(f"W4 rewritten manifest {name}")
-                        except (OSError, subprocess.CalledProcessError):
-                            failures.append(f"W4 cannot verify manifest append {name}")
+                                failures.append(f"W4 rewritten manifest {commit} {name}")
+                        except subprocess.CalledProcessError:
+                            failures.append(f"W4 cannot verify manifest append {commit} {name}")
     except (subprocess.CalledProcessError, UnicodeDecodeError):
-        failures.append("W4 cannot compare first parent")
+        failures.append("W4 cannot verify commit history")
     for name in sorted(tracked):
         if not name.startswith(".github/workflows/") or not name.endswith((".yml", ".yaml")):
             continue
