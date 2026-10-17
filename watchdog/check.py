@@ -185,7 +185,24 @@ def run() -> int:
                             previous = git("show", f"{parent}:{name}")
                             current = git("show", f"{commit}:{name}")
                             if not current.startswith(previous):
-                                failures.append(f"W4 rewritten manifest {commit} {name}")
+                                # WD-35: exact-byte, one-time baseline restoration only.
+                                # The original Git blob is the byte-exact authority.
+                                restore = (
+                                    name == "manifests/BASELINE-c498e84.sha256"
+                                    and git("rev-parse", f"{parent}:{name}").decode().strip()
+                                        == "bf3f3d85413deb94c1b36eee3ea4aabd414cddee"
+                                    and git("rev-parse", f"{commit}:{name}").decode().strip()
+                                        == "e317b1c42668126141baecd797cad84b4a1d57fe"
+                                    and (ROOT / "manifests/W4_RESTORATIONS.txt").is_file()
+                                    and (ROOT / "manifests/W4_RESTORATIONS.txt").read_text(
+                                        encoding="utf-8").strip()
+                                        == "WD-35 manifests/BASELINE-c498e84.sha256 bf3f3d85413deb94c1b36eee3ea4aabd414cddee e317b1c42668126141baecd797cad84b4a1d57fe"
+                                    and (ROOT / "exceptions/WD-35-baseline-restoration.sidecar.md").is_file()
+                                )
+                                if restore:
+                                    warnings.append(f"W4 WD-35 authorized exact-byte restoration {commit} {name}")
+                                else:
+                                    failures.append(f"W4 rewritten manifest {commit} {name}")
                         except subprocess.CalledProcessError:
                             failures.append(f"W4 cannot verify manifest append {commit} {name}")
     except (subprocess.CalledProcessError, UnicodeDecodeError):
