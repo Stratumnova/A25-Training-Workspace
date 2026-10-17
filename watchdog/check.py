@@ -45,13 +45,14 @@ def safe_path(raw: str) -> Path | None:
 
 
 def canonical(path: str, contents: str) -> str | None:
-    m = FRONT.search(contents[:3000])
+    block = contents.split("---", 2)[1] if contents.startswith("---") and contents.count("---") >= 2 else ""
+    m = FRONT.search(block)
     front = m.group(1) if m else None
     file_id = ID.match(Path(path).stem.upper())
     fm_id = ID.match(front) if front else None
     if front and ("UNASSIGNED" in front):
         return None
-    if fm_id and file_id and fm_id.group(1) != file_id.group(1):
+    if fm_id and file_id and not (fm_id.group(1) == file_id.group(1) or fm_id.group(1).startswith(file_id.group(1) + "-")):
         # Frontmatter can intentionally be more specific; disagreements need review.
         return "!MISMATCH:" + fm_id.group(1) + ":" + file_id.group(1)
     return fm_id.group(1) if fm_id else file_id.group(1) if file_id else None
@@ -111,7 +112,7 @@ def run() -> int:
         for line in lines:
             cleaned = line.strip().replace("**", "").replace("__", "")
             for field in FIELDS:
-                if re.match(rf"^{field}:\s*\S", cleaned):
+                if re.search(rf"(?:^|\s[·|]\s){field}:\s*\S", cleaned):
                     found.add(field)
         missing = set(FIELDS) - found
         if missing:
@@ -123,6 +124,8 @@ def run() -> int:
         path = safe_path(name)
         if path is None or not path.is_file():
             continue
+        if name.startswith("roundtable/inbox/") and re.match(r"RT-\d{3}", Path(name).name):
+            continue  # replies reference session IDs; sessions own them
         record = canonical(name, path.read_text(encoding="utf-8", errors="replace"))
         if record and record.startswith("!MISMATCH"):
             failures.append(f"W5 {name}: {record}")
@@ -149,7 +152,7 @@ def run() -> int:
         if len(parents) < 2:
             warnings.append("W4 SKIPPED root commit")
         else:
-            changes = git("diff", "--name-status", "-z", parents[1], "HEAD").decode().split("\0")
+            changes = git("diff", "--no-renames", "--name-status", "-z", parents[1], "HEAD").decode().split("\0")
             for i in range(0, len(changes)-1, 2):
                 status, name = changes[i], changes[i+1]
                 if status[:1] in ("M", "D") and protected(name):
