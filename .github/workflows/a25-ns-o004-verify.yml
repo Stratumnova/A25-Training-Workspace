@@ -1,0 +1,27 @@
+name: A25 NS O004 pinned synthetic verification
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact triggering revision
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          ref: ${{ github.sha }}
+      - name: Verify revision and execute tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "Triggered SHA: ${{ github.sha }}"
+          git rev-parse HEAD
+          test "$(git rev-parse HEAD)" = "${{ github.sha }}"
+          python3 --version
+          cd "project lead/archivist/namespace/prototype"
+          for f in registry.py test_registry.py README.md public_index.json; do
+            echo "$f: $(git hash-object "$f")"
+          done
+          python3 -m unittest discover -v
