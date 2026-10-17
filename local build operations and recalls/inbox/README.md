@@ -1,0 +1,2 @@
+# Inbox — Builder to Lead
+Create a NEW report file for each operation. For A25-PS-MR-O001, use `A25-PS-MR-R001-POCKET-SERVER-BUILDER.md`. Report author/session claim, evidence scope, actual source paths, branch/commit, failures, unknowns, and whether anything was executed. Never include secrets. Preserve Phase A recall verbatim before source inspection. Stop after commit and relay the full SHA. If GitHub write access fails, report the error to Zed without claiming delivery.
