@@ -16,7 +16,7 @@ from pathlib import Path, PurePosixPath
 ROOT = Path(__file__).resolve().parents[1]
 DIGEST = re.compile(r"^([0-9a-fA-F]{64})  (.+)$")
 FIELDS = ("FROM", "FOR", "DATE", "RE", "BASIS")
-ID = re.compile(r"^(A25-[A-Z]+-\d{3}(?:-CORR-\d{3}|-RESOLUTION)?|RT-\d{3}|WD-\d{3})")
+ID = re.compile(r"^(A25-[A-Z]+-\d{3}(?:-CORR-\d{3}|-RESOLUTION)?|RT-\d{3}|WD-\d{3})(?![A-Z0-9-])")
 FRONT = re.compile(r'^id:\s*[\x27\x22]?([^\s\x27\x22]+)', re.MULTILINE)
 PROTECTED = ("roundtable/inbox/", "legacy/")
 
@@ -48,13 +48,18 @@ def canonical(path: str, contents: str) -> str | None:
     block = contents.split("---", 2)[1] if contents.startswith("---") and contents.count("---") >= 2 else ""
     m = FRONT.search(block)
     front = m.group(1) if m else None
-    file_id = ID.match(Path(path).stem.upper())
+    stem = Path(path).stem.upper()
+    file_id = ID.match(stem)
     fm_id = ID.match(front) if front else None
-    if front and ("UNASSIGNED" in front):
+    if front and "UNASSIGNED" in front:
         return None
-    if fm_id and file_id and not (fm_id.group(1) == file_id.group(1) or fm_id.group(1).startswith(file_id.group(1) + "-")):
-        # Frontmatter can intentionally be more specific; disagreements need review.
-        return "!MISMATCH:" + fm_id.group(1) + ":" + file_id.group(1)
+    if fm_id and file_id:
+        # A filename may have a descriptive suffix; a frontmatter correction ID
+        # may be more specific than the base filename ID.
+        base = file_id.group(1)
+        declared = fm_id.group(1)
+        if declared != base and not declared.startswith(base + "-"):
+            return "!MISMATCH:" + declared + ":" + base
     return fm_id.group(1) if fm_id else file_id.group(1) if file_id else None
 
 
