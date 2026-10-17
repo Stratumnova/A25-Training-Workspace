@@ -51,3 +51,10 @@ Zed instructed GPT to preserve the A25 case-study/training material with Zed's o
 The case study distinguishes Zed's source wording, GPT's interpretation and reasons, Claude-reported evidence, verified CI results and unresolved work. It covers the separate rooms/folders, manual relay and recovery rules, human safety-stop approvals, and the WD-03/WD-04 GitHub Actions failures and fixes. This does not authorize GPT to edit Claude-authored source records or to claim background recording. Continue to add new user design decisions and GPT's explicit engineering rationale to durable records at meaningful checkpoints.
 
 **Status:** Additive training document created on development branch; Watchdog remains unmerged pending remaining design gates.
+
+
+## External builder continuity test — Zed instruction at 18:42 MDT
+
+Zed will load a repository ZIP into a fresh chat on a friend's phone, then temporarily adopt the new session as a builder to test whether it can align with A25. GPT prepared a read-only onboarding exercise at `roundtable/builders-inbox/A25-external-builder-intake-test-2026-10-16.md` (commit `ba8d510bdb071c5a5f0bf998f4f407c40adf27be`). The ZIP must be taken from `build/wd-02-watchdog-v0`, not `main`, for current Watchdog/WD-05 evidence. This is a candidate evaluation only; no builder acceptance or external-session PASS has occurred.
+
+Next: Zed supplies the guest's full intake report. GPT evaluates it against the onboarding checklist, records provenance and findings in a new builder-intake case study, and requests Zed's acceptance decision. No credentials, private data, write access, or authority changes are implied.
