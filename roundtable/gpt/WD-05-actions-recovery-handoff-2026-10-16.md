@@ -65,3 +65,8 @@ Next: Zed supplies the guest's full intake report. GPT evaluates it against the 
 Zed returned the full text of a fresh ChatGPT session's A25 External Builder Intake Report, with a screenshot of the shared chat. GPT evaluated it as **PROVISIONAL PASS** for repository comprehension, evidence labeling, authority boundaries and open-task recognition. This was an open-book intake with an explicit rubric, not an independent builder performance test. Candidate claimed no GitHub operations, no writes and no acceptance. GPT's evaluation and substantive report summary are in `case-studies/A25-external-builder-intake-test-01-2026-10-16.md` (creation commit `796aff253328610ee4dabd4d8be53a09897a3b4b`). The original candidate report was pasted by Zed; source byte parity is unverified.
 
 **Next:** Wait for Zed to adopt the candidate as a temporary builder, then assess one novel bounded read-only task. Do not infer authenticated identity, permissions or final acceptance from the intake response.
+
+
+## GB-01 guest builder onboarding — Zed at 18:51 MDT
+
+Zed explicitly authorized inviting the friend's free-tier ChatGPT session as a **temporary guest builder** via a prompt, with no GitHub write access. The friend will send the prompt; the builder returns a complete Markdown report through Zed for GPT archival, as with the Claude relay but retaining separate seat identity. GPT prepared `roundtable/builders-inbox/GB-01-temporary-builder-onboarding-and-W4-task-2026-10-16.md` (commit `68dcddc01c5636ca52b22b2696a954b61efcc396`). First assignment: read-only W4 multi-commit push-range audit. Seat `GB-01` is a functional test identifier, not a credential or proof of person/model identity. Do not claim completed builder work until a source report is received and evaluated.
