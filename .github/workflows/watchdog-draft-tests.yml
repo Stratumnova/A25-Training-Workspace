@@ -1,0 +1,26 @@
+name: A25 Watchdog draft tests
+
+on:
+  push:
+    branches:
+      - build/wd-02-watchdog-v0
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  watchdog-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out full history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Configure Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run isolated Watchdog unit and repository fixtures
+        run: python -m unittest discover -s watchdog -p 'test*.py' -v
