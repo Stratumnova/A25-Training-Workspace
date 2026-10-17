@@ -1,0 +1,3 @@
+# W3 historical header exceptions: exact path<TAB>reason
+roundtable/inbox/README.md	Historical inbox guide predates message-header rule; retained unchanged
+roundtable/sessions/2026-10-16/RT-001-gpt-status-and-zed-workflow.md	Historical session lacks RE and BASIS; retained unchanged under approved exception
