@@ -1,0 +1,27 @@
+{
+  "status": "SYNTHETIC",
+  "classification": "PUBLIC",
+  "records": [
+    {
+      "alias": "Gate-01",
+      "id": "A25:PS:TEST:N000001@r1",
+      "source_context": "SYNTHETIC/fixtures"
+    },
+    {
+      "alias": "Gate-01",
+      "id": "A25:TRAIN:DOC:N000001@r1",
+      "source_context": "SYNTHETIC/fixtures"
+    },
+    {
+      "alias": "Key5",
+      "id": "A25:LORE:PROMPT:N000001@r1",
+      "source_context": "SYNTHETIC/fixtures"
+    },
+    {
+      "alias": "Key5",
+      "id": "A25:PS:CODE:N000001@r1",
+      "source_context": "SYNTHETIC/fixtures"
+    }
+  ],
+  "note": "Synthetic PUBLIC-only retrieval/disambiguation examples; no actual source assertions."
+}
