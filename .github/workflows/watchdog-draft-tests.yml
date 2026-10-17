@@ -24,3 +24,5 @@ jobs:
           python-version: '3.11'
       - name: Run isolated Watchdog unit and repository fixtures
         run: python -m unittest discover -s watchdog -p 'test*.py' -v
+      - name: Validate actual A25 repository
+        run: python watchdog/check.py
