@@ -141,19 +141,19 @@ class WatchdogRepositoryFixtures(unittest.TestCase):
 
     def test_workflow_write_permission_rejected(self):
         self.write(".github/workflows/example.yml",
-                   "name: test\\non: push\\npermissions:\\n  contents: read\\n"
-                   "jobs:\\n  example:\\n    permissions:\\n      issues: write\\n")
+                   "name: test\non: push\npermissions:\n  contents: read\n"
+                   "jobs:\n  example:\n    permissions:\n      issues: write\n")
         self.commit()
         status, report = self.check()
         self.assertEqual(status, 1, report)
         self.assertIn("W6 write permission", report)
 
     def test_frontmatter_id_must_be_top_level(self):
-        sample = "---\\ntitle: sample\\nnotes: |\\n  id: A25-F-999\\n---\\n"
+        sample = "---\ntitle: sample\nnotes: |\n  id: A25-F-999\n---\n"
         self.assertIsNone(wd.canonical("notes/ordinary.md", sample))
 
     def test_correction_frontmatter_specificity(self):
-        sample = "---\\nid: A25-F-001-CORR-001\\n---\\n"
+        sample = "---\nid: A25-F-001-CORR-001\n---\n"
         self.assertEqual(wd.canonical("case-studies/A25-F-001-correction-001.md", sample),
                          "A25-F-001-CORR-001")
 
