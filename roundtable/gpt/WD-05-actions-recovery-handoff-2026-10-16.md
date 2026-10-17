@@ -70,3 +70,10 @@ Zed returned the full text of a fresh ChatGPT session's A25 External Builder Int
 ## GB-01 guest builder onboarding — Zed at 18:51 MDT
 
 Zed explicitly authorized inviting the friend's free-tier ChatGPT session as a **temporary guest builder** via a prompt, with no GitHub write access. The friend will send the prompt; the builder returns a complete Markdown report through Zed for GPT archival, as with the Claude relay but retaining separate seat identity. GPT prepared `roundtable/builders-inbox/GB-01-temporary-builder-onboarding-and-W4-task-2026-10-16.md` (commit `68dcddc01c5636ca52b22b2696a954b61efcc396`). First assignment: read-only W4 multi-commit push-range audit. Seat `GB-01` is a functional test identifier, not a credential or proof of person/model identity. Do not claim completed builder work until a source report is received and evaluated.
+
+
+## GB-01 engineering test 2 — Zed relay at 19:01 MDT
+
+Zed supplied three photographs of a separate phone and the complete Markdown file `GB-01-W4-audit-2026-10-16.md` (14,647 bytes, SHA-256 `8307c052376f0c31a82d752806bf9c93821f85a81aeb0d85b2b8ef655a6b48a9`). GB-01 reported reproducing a W4 multi-commit false pass in a disposable local repo, with matching manifest digest, and no GitHub writes. GPT independently fetched the pinned `watchdog/check.py` and confirmed the single-first-parent-diff source weakness, **not** the reported scratch execution. Evaluation: first bounded engineering task PASS; Claude review and remediation remain open. Case study `case-studies/A25-GB-01-W4-builder-test-02-2026-10-16.md` created at `630afc262e0d5eb20ac0232f7fc4199f11375419`. Full original Markdown attachment is not yet archived byte-exactly in GitHub; case study preserves its hash and substantive findings.
+
+Next: archive source report exactly if possible, seek Claude independent review, and strengthen W4 with push-range tests before merge.
