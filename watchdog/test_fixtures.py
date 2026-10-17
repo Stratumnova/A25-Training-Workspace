@@ -10,6 +10,7 @@ import unittest
 from contextlib import redirect_stdout
 from io import StringIO
 from pathlib import Path
+from unittest.mock import patch
 
 spec = importlib.util.spec_from_file_location("a25_watchdog", Path(__file__).with_name("check.py"))
 wd = importlib.util.module_from_spec(spec)
@@ -113,6 +114,30 @@ class WatchdogRepositoryFixtures(unittest.TestCase):
         status, report = self.check()
         self.assertEqual(status, 1)
         self.assertIn("W4 protected change", report)
+
+    def test_multi_commit_push_detects_intermediate_protected_change(self):
+        # Final tree is clean, but the first commit in the push rewrote history.
+        before = self.git("rev-parse", "HEAD").stdout.decode().strip()
+        self.write("roundtable/inbox/message.md", self.message() + "tampered\\n")
+        self.commit()
+        self.write("roundtable/inbox/message.md", self.message())
+        self.commit()
+        with patch.dict("os.environ", {"A25_WD_BEFORE": before}):
+            status, report = self.check()
+        self.assertEqual(status, 1, report)
+        self.assertIn("W4 protected change", report)
+
+    def test_multi_commit_push_detects_intermediate_manifest_rewrite(self):
+        before = self.git("rev-parse", "HEAD").stdout.decode().strip()
+        original = (self.root / "manifests/baseline.sha256").read_text()
+        self.write("manifests/baseline.sha256", "0" * 64 + "  roundtable/inbox/message.md\\n")
+        self.commit()
+        self.write("manifests/baseline.sha256", original)
+        self.commit()
+        with patch.dict("os.environ", {"A25_WD_BEFORE": before}):
+            status, report = self.check()
+        self.assertEqual(status, 1, report)
+        self.assertIn("W4 rewritten manifest", report)
 
     def test_malformed_digest(self):
         self.write("manifests/baseline.sha256", "xyz  roundtable/inbox/message.md\n")
