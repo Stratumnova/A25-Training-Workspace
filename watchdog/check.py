@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DIGEST = re.compile(r"^([0-9a-fA-F]{64})  (.+)$")
 FIELDS = ("FROM", "FOR", "DATE", "RE", "BASIS")
 ID = re.compile(r"^(A25-[A-Z]+-\d{3}(?:-CORR-\d{3}|-RESOLUTION)?|RT-\d{3}|WD-\d{3})")
-FRONT = re.compile(r"(?m)^id:\s*['\"]?([^'\\"\s]+)")
+FRONT = re.compile(r'^id:\s*[\x27\x22]?([^\s\x27\x22]+)', re.MULTILINE)
 PROTECTED = ("roundtable/inbox/", "legacy/")
 
 
