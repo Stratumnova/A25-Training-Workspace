@@ -152,7 +152,7 @@ def run() -> int:
         if len(parents) < 2:
             warnings.append("W4 SKIPPED root commit")
         else:
-            changes = git("diff", "--no-renames", "--name-status", "-z", parents[1], "HEAD").decode().split("\0")
+            changes = git("diff-tree", "--no-commit-id", "--no-renames", "--name-status", "-r", "-z", "HEAD").decode().split("\0")
             for i in range(0, len(changes)-1, 2):
                 status, name = changes[i], changes[i+1]
                 if status[:1] in ("M", "D") and protected(name):
@@ -182,6 +182,8 @@ def run() -> int:
             failures.append(f"W6 forbidden trigger {name}")
         if re.search(r"(?m)^\s*secrets\s*:", data) or "${{ secrets." in data:
             failures.append(f"W6 secret reference {name}")
+        if re.search(r"(?mi)^\s*(?:permissions\s*:\s*write-all|[a-z-]+\s*:\s*write)\s*$", data):
+            failures.append(f"W6 write permission {name}")
         if not re.search(r"(?m)^\s*contents:\s*read\s*$", data):
             failures.append(f"W6 missing contents: read {name}")
     for message in failures:
