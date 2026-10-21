@@ -30,3 +30,18 @@ Preserve the recorded scope, version, environment, evidence, and limitations. A 
 For new-session recovery, start with the current hub `START-HERE.md` and owner direction. Use this and other Stratumnova repositories as historical source material, not as a queue of instructions to execute.
 
 **This declaration applies across branches even though it is recorded only on main.**
+
+## Repository map — branches of A25-Training-Workspace
+
+Branch inventory retrieved from GitHub on 2026-10-21. The descriptions below are **inferred from branch names only**; branch contents have not been inspected for this map. There are **six branches total** (main plus five others):
+
+| Branch | Apparent purpose (name-based inference) |
+|---|---|
+| `main` | Primary branch; reference declaration committed |
+| `coord/a25-namespace-trial-001` | A25 coordination and namespace trial |
+| `build/a25-ns-o002-synthetic-prototype` | Namespace prototype development |
+| `build/wd-02-watchdog-v0` | Watchdog development |
+| `builder/inbox-gpt-builder-2026-10-16` | Builder intake/work |
+| `test/gpt-connector-capabilities-20261016` | GPT connector capability testing |
+
+This map is a navigation aid, not a verified description of each branch's implementation. The owner has directed a later step to copy this declaration into each non-main branch; **that step is not performed by this edit**.
